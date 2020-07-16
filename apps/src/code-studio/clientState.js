@@ -162,11 +162,24 @@ clientState.batchTrackProgress = function(scriptName, progress) {
  * @param {number} progress Indicates pass, fail, perfect
  */
 function setLevelProgress(scriptName, levelId, progress) {
+  var userId = window.appOptions.userId;
   var progressMap = clientState.allLevelsProgress();
-  if (!progressMap[scriptName]) {
-    progressMap[scriptName] = {};
+  if (userId) {
+    if (!progressMap[userId]) {
+      progressMap[userId] = {};
+    }
+    if (!progressMap[userId][scriptName]) {
+      progressMap[userId][scriptName] = {};
+    }
+    progressMap[userId][scriptName][levelId] = progress;
+  } else {
+    // logged out user progress will go under progress directly
+    // instead of also under the userId, to be backwards compatible
+    if (!progressMap[scriptName]) {
+      progressMap[scriptName] = {};
+    }
+    progressMap[scriptName][levelId] = progress;
   }
-  progressMap[scriptName][levelId] = progress;
   trySetSessionStorage('progress', JSON.stringify(progressMap));
 }
 
