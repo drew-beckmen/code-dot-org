@@ -139,6 +139,7 @@ clientState.trackProgress = function(
  */
 clientState.batchTrackProgress = function(scriptName, progress) {
   var data = {};
+  var userId = window.appOptions.userId;
   var keys = Object.keys(progress);
   for (let i = 0; i < keys.length; i++) {
     let level = keys[i];
@@ -151,7 +152,16 @@ clientState.batchTrackProgress = function(scriptName, progress) {
   }
 
   var progressMap = clientState.allLevelsProgress();
-  progressMap[scriptName] = data;
+  if (userId) {
+    if (!progressMap[userId]) {
+      progressMap[userId] = {};
+    }
+    progressMap[userId][scriptName] = data;
+  } else {
+    // logged out user progress will go under progress directly
+    // instead of also under the userId, to be backwards compatible
+    progressMap[scriptName] = data;
+  }
   trySetSessionStorage('progress', JSON.stringify(progressMap));
 };
 
