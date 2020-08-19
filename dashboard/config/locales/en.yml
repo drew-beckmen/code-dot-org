@@ -1029,6 +1029,10 @@ en:
       school_name: 'School Name'
       school_city: 'School City'
       school_country: 'School Country'
+      colombian_school_city: 'School City'
+      colombian_school_department: 'School Department'
+      colombian_school_municipality: 'School Municipality'
+      colombian_school_name: 'School Name'
       ages: 'Which age(s) do you teach this year?'
       subjects: 'Which subject(s) do you teach this year?'
       resources: 'Which of the following CS education resources do you use?'
@@ -1048,6 +1052,7 @@ en:
       school_country:
         canada: 'Canada'
         chile: 'Chile'
+        colombia: 'Colombia'
         israel: 'Israel'
         malaysia: 'Malaysia'
         mexico: 'Mexico'
@@ -1097,6 +1102,7 @@ en:
         csf_express: 'CS Fundamentals (Pre-Express or Express)'
         csd: 'CS Discoveries'
         csp: 'CS Principles'
+        not_applicable: "Not applicable"
       email_opt_in:
         opt_in_yes: 'Yes'
         opt_in_no: 'No'
@@ -1105,6 +1111,9 @@ en:
       intro: "Thank you for taking time to receive training on Code.org’s curriculum. Our mission to bring computer science education opportunities to all children in all schools around the world would not be possible without you."
       instructions: "Please fill out the form below to indicate that 1) you attended a training workshop run by one of Code.org’s international partners, and 2) you agree to share your information with our international partner in your country so that they can help to support your journey as a computer science teacher."
       thanks_markdown: "Thank you for submitting! We look forward to supporting you as you get to know Code.org’s curriculum and tools. Please keep sharing your questions and feedback with us by writing to us at [support@code.org](%{support_email_url}) or by posting on the [teacher forum](%{teacher_forum_url})!"
+      facilitator_not_listed: "My facilitator is not listed"
+      facilitator_not_applicable: "Not applicable"
+      organizer_not_listed: "My organizer is not listed"
     logged_out:
       heading: 'Thanks for your interest in the Professional Learning Program!'
       body: 'To get started, you first need to be logged into your Code.org account. If you’d like more information about the program before you start your application, please check out the <a href="%{url}">Professional Learning Program overview</a>.'
@@ -1143,3 +1152,5 @@ en:
     text: "**Are you a parent or guardian?** Link your email to this account to stay updated on your child’s progress and projects!"
     link_your_email: "Link your email"
     not_now: "Not now"
+  behaviors:
+    this_sprite: "this sprite"
