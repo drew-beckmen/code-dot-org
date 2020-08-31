@@ -4,7 +4,10 @@ import {
   setVerified,
   setVerifiedResources
 } from '@cdo/apps/code-studio/verifiedTeacherRedux';
-import {setUserProviders} from '@cdo/apps/templates/currentUserRedux';
+import {
+  setUserProviders,
+  setCurrentUserId
+} from '@cdo/apps/templates/currentUserRedux';
 import {getStore} from '@cdo/apps/code-studio/redux';
 import {registerReducers} from '@cdo/apps/redux';
 import plcHeaderReducer, {
@@ -45,6 +48,10 @@ function initPage() {
 
   if (scriptData.user_providers) {
     store.dispatch(setUserProviders(scriptData.user_providers));
+  }
+
+  if (scriptData.user_id) {
+    store.dispatch(setCurrentUserId(scriptData.user_id));
   }
 
   if (scriptData.script_announcements) {

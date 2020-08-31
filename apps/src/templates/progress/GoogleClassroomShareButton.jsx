@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Button from '../Button';
 import i18n from '@cdo/locale';
+import firehoseClient from '@cdo/apps/lib/util/firehose';
 
 // https://developers.google.com/classroom/brand
 const styles = {
@@ -23,7 +24,8 @@ class GoogleClassroomShareButton extends React.Component {
     itemtype: PropTypes.string.isRequired,
     title: PropTypes.string,
     height: PropTypes.number,
-    courseid: PropTypes.number
+    courseid: PropTypes.number,
+    analyticsData: PropTypes.object
   };
 
   constructor(props) {
@@ -33,6 +35,7 @@ class GoogleClassroomShareButton extends React.Component {
     this.renderButton = this.renderButton.bind(this);
     this.onShareStart = this.onShareStart.bind(this);
     this.onShareComplete = this.onShareComplete.bind(this);
+    this.logEvent = this.logEvent.bind(this);
   }
 
   componentDidMount() {
@@ -86,11 +89,20 @@ class GoogleClassroomShareButton extends React.Component {
   onShareCompleteName = () => 'onShareComplete_' + this.props.buttonId;
 
   onShareStart() {
-    console.log('on share start: ' + this.props.title);
+    this.logEvent('share_started');
   }
 
   onShareComplete() {
-    console.log('on share complete: ' + this.props.title);
+    this.logEvent('share_completed');
+  }
+
+  logEvent(event) {
+    firehoseClient.putRecord({
+      study: 'google-classroom-button',
+      study_group: 'v0',
+      event: event,
+      data_json: JSON.stringify(this.props.analyticsData)
+    });
   }
 
   renderButton() {
