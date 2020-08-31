@@ -31,9 +31,15 @@ class GoogleClassroomShareButton extends React.Component {
     this.loadApi = this.loadApi.bind(this);
     this.waitForGapi = this.waitForGapi.bind(this);
     this.renderButton = this.renderButton.bind(this);
+    this.onShareStart = this.onShareStart.bind(this);
+    this.onShareComplete = this.onShareComplete.bind(this);
   }
 
   componentDidMount() {
+    // Use unique callback names since we're adding to the global namespace
+    window[this.onShareStartName()] = this.onShareStart;
+    window[this.onShareCompleteName()] = this.onShareComplete;
+
     if (this.gapiReady()) {
       this.renderButton();
     } else {
@@ -75,13 +81,27 @@ class GoogleClassroomShareButton extends React.Component {
   gapiReady = () =>
     window.gapi && typeof window.gapi.sharetoclassroom !== 'undefined';
 
+  onShareStartName = () => 'onShareStart_' + this.props.buttonId;
+
+  onShareCompleteName = () => 'onShareComplete_' + this.props.buttonId;
+
+  onShareStart() {
+    console.log('on share start: ' + this.props.title);
+  }
+
+  onShareComplete() {
+    console.log('on share complete: ' + this.props.title);
+  }
+
   renderButton() {
     window.gapi.sharetoclassroom.render(this.props.buttonId, {
       url: this.props.url,
       itemtype: this.props.itemtype,
       title: this.props.title,
       size: this.props.height,
-      courseid: this.props.courseid
+      courseid: this.props.courseid,
+      onsharestart: `${this.onShareStartName()}`,
+      onsharecomplete: `${this.onShareCompleteName()}`
     });
   }
 
