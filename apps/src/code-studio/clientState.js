@@ -94,17 +94,6 @@ clientState.writeSourceForLevel = function(
 };
 
 /**
- * Returns the progress attained for the given level.
- * @param {string} scriptName The script name
- * @param {number} levelId The level
- * @returns {number}
- */
-clientState.levelProgress = function(scriptName, levelId) {
-  var progressMap = clientState.allLevelsProgress();
-  return (progressMap[scriptName] || {})[levelId] || 0;
-};
-
-/**
  * Tracks the users progress after they click run. Results larger than 999 are
  * reserved for server-dependent changes and can't be cached locally.
  * @param {boolean} result - Whether the user's solution is successful
@@ -124,7 +113,7 @@ clientState.trackProgress = function(
     addLines(lines);
   }
 
-  var savedResult = clientState.levelProgress(scriptName, levelId);
+  var savedResult = (clientState.allLevelsProgress()[scriptName] || {})[levelId] || 0;
   if (
     testResult <= clientState.MAXIMUM_CACHABLE_RESULT &&
     savedResult !== mergeActivityResult(savedResult, testResult)
@@ -183,27 +172,6 @@ clientState.allLevelsProgress = function() {
     // Recover from malformed data.
     return {};
   }
-};
-
-/**
- * Returns the best progress of any of the specified levels
- * @param {Array.<number>} levelIds List of level ids to check for progress
- * @param {string} scriptName Script in which to check for progress
- * @param {Object=} progress A map from level id to progress values. Will be
- *  fetched from sessionStorage if not provided.
- */
-clientState.bestProgress = function(levelIds, scriptName, progress) {
-  if (!progress) {
-    progress = clientState.allLevelsProgress();
-  }
-  return (
-    Math.max.apply(
-      Math,
-      levelIds
-        .filter(id => progress[scriptName][id])
-        .map(id => progress[scriptName][id])
-    ) || 0
-  );
 };
 
 /**

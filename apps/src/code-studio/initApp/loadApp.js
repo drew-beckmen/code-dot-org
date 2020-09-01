@@ -68,7 +68,7 @@ function mergeProgressData(scriptName, serverProgress) {
       )
     )
   );
-
+// this should be unneeded.. we have the listener.
   Object.keys(serverProgress).forEach(levelId => {
     // Write down new progress in sessionStorage
     clientState.trackProgress(

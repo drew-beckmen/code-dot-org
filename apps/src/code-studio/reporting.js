@@ -247,7 +247,7 @@ reporting.sendReport = function(report) {
     queryItems.push(key + '=' + report[key]);
   }
   const queryString = queryItems.join('&');
-
+// this also shouldn't be needed. we should update redux directly.
   clientState.trackProgress(
     report.result,
     report.lines,

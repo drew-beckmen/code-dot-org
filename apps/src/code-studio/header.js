@@ -73,6 +73,9 @@ header.build = function(
   scriptNameData,
   hasAppOptions
 ) {
+  if (progressData) {
+    progress.useDbProgress();
+  }
   scriptData = scriptData || {};
   lessonGroupData = lessonGroupData || {};
   lessonData = lessonData || {};

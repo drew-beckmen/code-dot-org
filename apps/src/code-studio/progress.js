@@ -307,8 +307,10 @@ function initializeStoreWithProgress(
   if (!isViewingStudentAnswer) {
     let lastProgress;
     store.subscribe(() => {
-      const nextProgress = store.getState().progress.levelProgress;
-      if (nextProgress !== lastProgress) {
+      const progressState = store.getState().progress
+      const nextProgress = progressState.levelProgress;
+      const useDbProgress = progressState.useDbProgress;
+      if (useDbProgress && nextProgress !== lastProgress) { // skip if user is logged in
         lastProgress = nextProgress;
         clientState.batchTrackProgress(scriptData.name, nextProgress);
       }
