@@ -36,12 +36,18 @@ class GoogleClassroomShareButton extends React.Component {
     this.onShareStart = this.onShareStart.bind(this);
     this.onShareComplete = this.onShareComplete.bind(this);
     this.logEvent = this.logEvent.bind(this);
+    this.blur = this.blur.bind(this);
+    this.mouseOver = this.mouseOver.bind(this);
+    this.mouseOut = this.mouseOut.bind(this);
+    this.iframeMouseOver = false;
   }
 
   componentDidMount() {
     // Use unique callback names since we're adding to the global namespace
     window[this.onShareStartName()] = this.onShareStart;
     window[this.onShareCompleteName()] = this.onShareComplete;
+
+    window.addEventListener('blur', this.blur);
 
     if (this.gapiReady()) {
       this.renderButton();
@@ -96,6 +102,23 @@ class GoogleClassroomShareButton extends React.Component {
     this.logEvent('share_completed');
   }
 
+  blur() {
+    console.log('on blur ' + this.iframeMouseOver);
+    if (this.iframeMouseOver) {
+      console.log('on click ' + this.props.title);
+    }
+  }
+
+  mouseOver() {
+    this.iframeMouseOver = true;
+    console.log('mouseOver', this.iframeMouseOver);
+  }
+
+  mouseOut() {
+    this.iframeMouseOver = false;
+    console.log('mouseOut', this.iframeMouseOver);
+  }
+
   logEvent(event) {
     firehoseClient.putRecord({
       study: 'google-classroom-button',
@@ -106,6 +129,8 @@ class GoogleClassroomShareButton extends React.Component {
   }
 
   renderButton() {
+    const isIE = /*@cc_on!@*/ false || !!document.documentMode;
+    console.log('isIE: ' + isIE);
     window.gapi.sharetoclassroom.render(this.props.buttonId, {
       url: this.props.url,
       itemtype: this.props.itemtype,
@@ -120,7 +145,9 @@ class GoogleClassroomShareButton extends React.Component {
   render() {
     return (
       <span style={styles.container}>
-        <span id={this.props.buttonId} />
+        <span onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
+          <span id={this.props.buttonId} />
+        </span>
         <span style={styles.label}>{i18n.loginTypeGoogleClassroom()}</span>
       </span>
     );
