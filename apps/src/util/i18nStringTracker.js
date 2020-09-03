@@ -1,4 +1,5 @@
 import experiments from '@cdo/apps/util/experiments';
+import {getI18nStringTrackerWorker} from '@cdo/apps/util/i18nStringTrackerWorker';
 
 // A map of "string source" -> "list of strings used"
 // For example: window.stringUsageSources['maze'] = ['level_1.instruction.header']
@@ -32,9 +33,10 @@ function log(stringKey, source) {
   if (!stringKey || !source) {
     return;
   }
-  if (!window.stringUsageSources[source]) {
-    // Initialize the list of strings for the source if it doesn't already exist.
-    window.stringUsageSources[source] = new Set();
-  }
-  window.stringUsageSources[source].add(stringKey);
+  // Send the usage data to a background worker thread to be buffered and sent.
+  getI18nStringTrackerWorker(window.location.origin).postMessage({
+    stringKey: stringKey,
+    source: source,
+    url: window.location.origin + window.location.pathname //strip the query string from the URL
+  });
 }

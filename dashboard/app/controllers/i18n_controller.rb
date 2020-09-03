@@ -1,4 +1,9 @@
 class I18nController < ApplicationController
+  # Remove CSRF protection for track_string_usage because calls are made from web worker which has a different
+  # origin than the page it runs on. If the removed CSRF protection is abused, we should consider moving the i18n string
+  # tracking out of a web worker.
+  protect_from_forgery except: [:track_string_usage]
+
   # The max number of i18n string keys which can be recorded in one request.
   # This is to protect us from malicious API calls where thousands or millions of items are given in a single request.
   # It doesn't stop us from receiving it, but it does stop us from doing anything with it.
